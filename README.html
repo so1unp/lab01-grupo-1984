@@ -1,0 +1,71 @@
+<h1 id="laboratorio-1---encriptador--desencriptador">Laboratorio 1 -
+Encriptador / Desencriptador</h1>
+<p>El objetivo de este laboratorio es familiarizarse con el lenguaje C,
+las herramientas de desarrollo y las llamadas al sistema en Linux.</p>
+<h2 id="enunciado">Enunciado</h2>
+<p>Completar los programas <code>encrypt.c</code> y
+<code>decrypt.c</code> para que encripten y desencripten un mensaje
+respectivamente.</p>
+<p>La encriptación es muy sencilla: cada byte del mensaje debe ser
+precedido por 7 bytes aleatorios en el resultado encriptado.</p>
+<h3 id="llamadas-al-sistema-a-utilizar">Llamadas al sistema a
+utilizar</h3>
+<p>Utilizar las siguientes llamadas al sistema:</p>
+<ul>
+<li><a
+href="http://man7.org/linux/man-pages/man2/write.2.html"><code>write()</code></a>:
+escribe <em>n</em> bytes en el descriptor de archivo indicado.</li>
+<li><a
+href="http://man7.org/linux/man-pages/man2/read.2.html"><code>read()</code></a>:
+lee <em>n</em> bytes desde el descriptor de archivo indicado.</li>
+</ul>
+<p>También usar las siguientes funciones de biblioteca:</p>
+<ul>
+<li><a
+href="https://www.man7.org/linux/man-pages/man3/rand.3.html"><code>rand()</code></a>:
+retorna un número pseudo-aleatorio.</li>
+<li><a
+href="https://www.man7.org/linux/man-pages/man3/rand.3.html"><code>srand()</code></a>:
+inicializa semilla para generación de números pseudo-aleatorios.</li>
+<li><a
+href="https://www.man7.org/linux/man-pages/man3/perror.3.html"><code>perror()</code></a>:
+para imprimir mensajes de error por fallos en invocaciones a llamadas al
+sistema u otras funciones de biblioteca.</li>
+</ul>
+<h3 id="encriptador">Encriptador</h3>
+<p>El programa <code>encrypt.c</code> debe leer el mensaje a encriptar
+como un argumento desde la línea de comando o desde la <em>entrada
+estándar</em> y generar el contenido encriptado en la <em>salida
+estándar</em>:</p>
+<ul>
+<li>Encripta "hola" y lo imprime por la salida estándar:
+<code>bin/encrypt hola</code></li>
+<li>Encripta el archivo <code>topsecret.txt</code>:
+<code>bin/encrypt &lt; topsecret.txt</code></li>
+</ul>
+<p>Utilizar <code>argv</code> y <code>argc</code> para determinar si el
+mensaje a encriptar es provisto como argumento.</p>
+<p>A continuación un ejemplo de que tendría que devolver el programa al
+encriptar "hola" y enviarlo a la salida estándar. El programa
+<code>xxd</code> muestra una reprsentación hexadecimal de su entrada y
+lo usamos para que la salida sea más fácil de leer:</p>
+<pre><code>$ bin/encrypt &quot;hola&quot; | xxd
+00000000: 2b07 7d09 250e 5e68 5c17 2b2c 0c17 5b6f  +.}.%.^h\.+,..[o
+00000010: 1829 0100 5f26 186c 247d 1f15 087b 4061  .).._&amp;.l$}...{@a</code></pre>
+<h3 id="desencriptador">Desencriptador</h3>
+<p>El programa <code>decrypt.c</code> debe leer los datos encriptados
+desde la <em>entrada estándar</em>. El mensaje oculto es presentado en
+la <em>salida estándar</em>. El número de bytes leído de la entrada
+estándar indica la longitud del mensaje oculto.</p>
+<h3 id="ejecución">Ejecución</h3>
+<p>Dado que ambos programan pueden leer y escribir de la entrada
+estándar, tendrían que poder ejecutar un comando como el siguiente:</p>
+<pre><code>$ bin/encrypt hola | bin/decrypt
+hola
+$</code></pre>
+<p>O incluso así, pasando el mensaje desde la entrada estándar:</p>
+<pre><code>$ echo -n hola | bin/encrypt | bin/decrypt
+hola
+$</code></pre>
+<hr />
+<p>¡Fín del Laboratorio 1!</p>
