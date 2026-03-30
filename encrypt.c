@@ -1,42 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <time.h>  
-#include <string.h>
+#include <unistd.h> 
+#include <time.h>   
 
-int main(int argc, char *argv[])
-{
-    srand(time(NULL));
+void encriptar_byte(unsigned char c) {
+    unsigned char basura;
+    // 1. Enviamos 7 bytes aleatorios
+    for (int i = 0; i < 7; i++) {
+        basura = (unsigned char)rand();
+        if (write(1, &basura, 1) == -1) {
+            perror("Error al escribir basura");
+            exit(EXIT_FAILURE);
+        }
+    }
+    // 2. Enviamos el byte real 
+    if (write(1, &c, 1) == -1) {
+        perror("Error al escribir mensaje");
+        exit(EXIT_FAILURE);
+    }
+}
 
-    char buffer;
+int main(int argc, char *argv[]) {
+    
+    // Inicializamos la semilla
+    srand(time(NULL)); 
+
     if (argc > 1) {
-        // Si el mensaje viene en argv[1]
-        char *message = argv[1];
-        int largo = strlen(message);
-
-        for (int i = 0; i < largo; i++) {
-            //los 7 randoms
-            write7randoms();
-            // el verdadero byte
-            write(1, &message[i], 1);
+        // El mensaje viene por argumento
+        char *mensaje = argv[1];
+        for (int i = 0; mensaje[i] != '\0'; i++) {
+            encriptar_byte((unsigned char)mensaje[i]);
         }
     } else {
-        // si viene de la otra salida
+        unsigned char buffer;
         while (read(0, &buffer, 1) > 0) {
-            // Generar 7 bytes de basura
-            write7randoms();
-            // Escribir el byte que acabamos de leer
-            write(1, &buffer, 1);
+            encriptar_byte(buffer);
         }
     }
 
     exit(EXIT_SUCCESS);
-}
-
-void write7randoms(){
-    for (int j = 0; j < 7; j++) {
-        char garbage = (char)(rand() % 256);
-        write(1, &garbage, 1); 
-    }
-            
 }
